@@ -1,5 +1,4 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 import javax.swing.tree.TreeNode;
 
@@ -115,12 +114,6 @@ public class OperationOfBinaryTree {
         }
     }
 
-    public static int height(Node root) {
-        if (root == null)
-            return 0;
-        return (height(root.left) + height(root.right) + 1);
-    }
-
     public static int ans = 0;
 
     public static int heightDia(Node root) {
@@ -138,11 +131,61 @@ public class OperationOfBinaryTree {
         return ans;
     }
 
+    static class Info {
+        Node node;
+        int hd;
+
+        Info(Node node, int hd) {
+            this.node = node;
+            this.hd = hd;
+        }
+    }
+
+    public static void topView(Node root) {
+        Queue<Info> q = new LinkedList<>();
+        HashMap<Integer, Node> map = new HashMap<>();
+        int min = 0, max = 0;
+
+        q.add(new Info(root, 0));
+        q.add(null);
+
+        while (q.size() > 0) {
+            Info curr = q.remove();
+            if (curr == null) {
+                if (!q.isEmpty()) {
+                    q.add(null);
+                } else {
+                    break;
+                }
+            } else {
+                if (!map.containsKey(curr.hd)) {
+                    map.put(curr.hd, curr.node);
+                }
+
+                if (curr.node.left != null) {
+                    q.add(new Info(curr.node.left, curr.hd - 1));
+                    min = Math.min(curr.hd - 1, min);
+                }
+
+                if (curr.node.right != null) {
+                    q.add(new Info(curr.node.right, curr.hd + 1));
+                    max = Math.max(curr.hd + 1, max);
+                }
+            }
+        }
+
+        for (int i = min; i <= max; i++) {
+            System.out.print(map.get(i).data + " ");
+        }
+        System.out.println();
+    }
+
     public static void main(String[] args) {
         int preorder[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1 };
         BinaryTree tree = new BinaryTree();
         Node root = tree.buildBinaryTree(preorder);
-        System.out.println(diameterOfBinaryTree(root));
+        // System.out.println(diameterOfBinaryTree(root));
+        topView(root);
 
     }
 }
