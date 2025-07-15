@@ -1,8 +1,6 @@
 import java.util.*;
 
-import javax.swing.tree.TreeNode;
-
-public class OperationOfBinaryTree {
+public class KthLevelOfTree {
     static class Node {
         int data;
         Node left;
@@ -114,20 +112,59 @@ public class OperationOfBinaryTree {
         }
     }
 
+    public static void kthLevelIterative(Node root, int k) {
+        if (root == null)
+            return;
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        q.add(null);
+        int level = 1;
+
+        while (q.size() > 0) {
+            Node curr = q.peek();
+            q.remove();
+            if (curr == null) {
+                if (!q.isEmpty()) {
+                    q.add(null);
+                    level++;
+                } else {
+                    break;
+                }
+            } else {
+                if (level == k) {
+                    System.out.print(curr.data + " ");
+                }
+                if (curr.left != null) {
+                    q.add(curr.left);
+                }
+                if (curr.right != null) {
+                    q.add(curr.right);
+                }
+            }
+        }
+        System.out.println();
+    }
+
+    public static void kthLevelRecursive(Node root, int level, int k) {
+        if(root==null){
+            return;
+        }
+
+        if(level==k){
+            System.out.print(root.data+" ");
+            return;
+        }
+        kthLevelRecursive(root.left, level+1, k);
+        kthLevelRecursive(root.right, level+1, k);
+    }
+
     public static void main(String[] args) {
-        int preorder[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1 };
+        int preorder[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, 6, -1, -1, 7, -1, -1 };
         BinaryTree tree = new BinaryTree();
         Node root = tree.buildBinaryTree(preorder);
-        tree.preOrder(root);
+        kthLevelIterative(root, 3);
+        kthLevelRecursive(root, 1, 3);
         System.out.println();
-        tree.inOrder(root);
-        System.out.println();
-        tree.postOrder(root);
-        System.out.println();
-        tree.BFS(root);
-        System.out.println();
-        System.out.println(tree.height(root));
-        System.out.println(tree.count(root));
-        System.out.println(tree.sumOfAllNodes(root));
+
     }
 }

@@ -1,8 +1,6 @@
 import java.util.*;
 
-import javax.swing.tree.TreeNode;
-
-public class OperationOfBinaryTree {
+public class LowestCommonAncestor {
     static class Node {
         int data;
         Node left;
@@ -114,20 +112,67 @@ public class OperationOfBinaryTree {
         }
     }
 
+    public static boolean getPath(Node root, int n, ArrayList<Node> path) {
+        if (root == null) {
+            return false;
+        }
+
+        path.add(root);
+
+        if (root.data == n) {
+            return true;
+        }
+
+        boolean foundLeft = getPath(root.left, n, path);
+        boolean foundRight = getPath(root.right, n, path);
+
+        if (foundLeft || foundRight) {
+            return true;
+        }
+
+        path.remove(path.size() - 1);
+        return false;
+    }
+
+    public static Node lowestcommonAncestor(Node root, int n1, int n2) {
+        ArrayList<Node> path1 = new ArrayList<>();
+        ArrayList<Node> path2 = new ArrayList<>();
+
+        getPath(root, n1, path1);
+        getPath(root, n2, path2);
+
+        int i = 0;
+        for (; i < path1.size() && i < path2.size(); i++) {
+            if (path1.get(i) != path2.get(i)) {
+                break;
+            }
+        }
+        Node lca = path1.get(i - 1);
+        return lca;
+    }
+
+    public static Node lca2(Node root, int n1, int n2){
+        if(root==null || root.data ==n1 || root.data==n2){
+            return root;
+        }
+
+        Node leftlca = lca2(root.left, n1, n2);
+        Node rightlca = lca2(root.right, n1, n2);
+
+        if (rightlca==null) {
+            return leftlca;
+        }
+        
+        if(leftlca==null){
+            return rightlca;
+        }
+
+        return root;
+    }
     public static void main(String[] args) {
-        int preorder[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1 };
+        int preorder[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, 6, -1, -1, 7, -1, -1 };
         BinaryTree tree = new BinaryTree();
         Node root = tree.buildBinaryTree(preorder);
-        tree.preOrder(root);
-        System.out.println();
-        tree.inOrder(root);
-        System.out.println();
-        tree.postOrder(root);
-        System.out.println();
-        tree.BFS(root);
-        System.out.println();
-        System.out.println(tree.height(root));
-        System.out.println(tree.count(root));
-        System.out.println(tree.sumOfAllNodes(root));
+        System.out.println(lca2(root, 6, 7).data);
     }
 }
