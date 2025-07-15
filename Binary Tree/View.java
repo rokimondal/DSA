@@ -1,8 +1,8 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
-import javax.swing.tree.TreeNode;
-
-public class OperationOfBinaryTree {
+public class View {
     static class Node {
         int data;
         Node left;
@@ -114,20 +114,97 @@ public class OperationOfBinaryTree {
         }
     }
 
+    static class Info {
+        Node node;
+        int hd;
+
+        Info(Node node, int hd) {
+            this.node = node;
+            this.hd = hd;
+        }
+    }
+
+    public static void topView(Node root) {
+        Queue<Info> q = new LinkedList<>();
+        HashMap<Integer, Node> map = new HashMap<>();
+        int min = 0, max = 0;
+
+        q.add(new Info(root, 0));
+        q.add(null);
+
+        while (q.size() > 0) {
+            Info curr = q.remove();
+            if (curr == null) {
+                if (!q.isEmpty()) {
+                    q.add(null);
+                } else {
+                    break;
+                }
+            } else {
+                if (!map.containsKey(curr.hd)) {
+                    map.put(curr.hd, curr.node);
+                }
+
+                if (curr.node.left != null) {
+                    q.add(new Info(curr.node.left, curr.hd - 1));
+                    min = Math.min(curr.hd - 1, min);
+                }
+
+                if (curr.node.right != null) {
+                    q.add(new Info(curr.node.right, curr.hd + 1));
+                    max = Math.max(curr.hd + 1, max);
+                }
+            }
+        }
+
+        for (int i = min; i <= max; i++) {
+            System.out.print(map.get(i).data + " ");
+        }
+        System.out.println();
+    }
+
+    public static void bottomView(Node root) {
+        Queue<Info> q = new LinkedList<>();
+        HashMap<Integer, Node> map = new HashMap<>();
+        int min = 0, max = 0;
+
+        q.add(new Info(root, 0));
+        q.add(null);
+
+        while (q.size() > 0) {
+            Info curr = q.remove();
+            if (curr == null) {
+                if (!q.isEmpty()) {
+                    q.add(null);
+                } else {
+                    break;
+                }
+            } else {
+                map.put(curr.hd, curr.node);
+
+                if (curr.node.left != null) {
+                    q.add(new Info(curr.node.left, curr.hd - 1));
+                    min = Math.min(curr.hd - 1, min);
+                }
+
+                if (curr.node.right != null) {
+                    q.add(new Info(curr.node.right, curr.hd + 1));
+                    max = Math.max(curr.hd + 1, max);
+                }
+            }
+        }
+
+        for (int i = min; i <= max; i++) {
+            System.out.print(map.get(i).data + " ");
+        }
+        System.out.println();
+    }
+
     public static void main(String[] args) {
         int preorder[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1 };
         BinaryTree tree = new BinaryTree();
         Node root = tree.buildBinaryTree(preorder);
-        tree.preOrder(root);
-        System.out.println();
-        tree.inOrder(root);
-        System.out.println();
-        tree.postOrder(root);
-        System.out.println();
-        tree.BFS(root);
-        System.out.println();
-        System.out.println(tree.height(root));
-        System.out.println(tree.count(root));
-        System.out.println(tree.sumOfAllNodes(root));
+        topView(root);
+        bottomView(root);
     }
 }

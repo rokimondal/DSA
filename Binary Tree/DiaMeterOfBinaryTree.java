@@ -1,8 +1,7 @@
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
 
-import javax.swing.tree.TreeNode;
-
-public class OperationOfBinaryTree {
+public class DiaMeterOfBinaryTree {
     static class Node {
         int data;
         Node left;
@@ -114,20 +113,27 @@ public class OperationOfBinaryTree {
         }
     }
 
+    public static int ans = 0;
+
+    public static int heightDia(Node root) {
+        if (root == null)
+            return 0;
+
+        int lh = heightDia(root.left);
+        int rh = heightDia(root.right);
+        ans = Math.max(lh + rh, ans);
+        return Math.max(lh, rh) + 1;
+    }
+
+    public static int diameterOfBinaryTree(Node root) {
+        heightDia(root);
+        return ans;
+    }
+
     public static void main(String[] args) {
         int preorder[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1 };
         BinaryTree tree = new BinaryTree();
         Node root = tree.buildBinaryTree(preorder);
-        tree.preOrder(root);
-        System.out.println();
-        tree.inOrder(root);
-        System.out.println();
-        tree.postOrder(root);
-        System.out.println();
-        tree.BFS(root);
-        System.out.println();
-        System.out.println(tree.height(root));
-        System.out.println(tree.count(root));
-        System.out.println(tree.sumOfAllNodes(root));
+        System.out.println(diameterOfBinaryTree(root));
     }
 }
