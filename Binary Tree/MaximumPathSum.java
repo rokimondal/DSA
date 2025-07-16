@@ -1,8 +1,6 @@
 import java.util.*;
 
-import javax.swing.tree.TreeNode;
-
-public class OperationOfBinaryTree {
+public class MaximumPathSum {
     static class Node {
         int data;
         Node left;
@@ -114,70 +112,26 @@ public class OperationOfBinaryTree {
         }
     }
 
-    public static boolean isuniValued(Node root, int n) {
-        if (root == null) {
-            return true;
-        }
-        if (root.data != n) {
-            return false;
-        }
-        return isuniValued(root.left, n) && isuniValued(root.right, n);
-    }
+    static int maxSum = Integer.MIN_VALUE;
 
-    public static void invertBinaryTree(Node root) {
-        if (root == null) {
-            return;
-        }
+    public static int maximumPathSum(Node root) {
+        if (root == null)
+            return 0;
 
-        Node temp = root.left;
-        root.left = root.right;
-        root.right = temp;
-        invertBinaryTree(root.left);
-        invertBinaryTree(root.right);
-    }
+        int left = Math.max(0, maximumPathSum(root.left));
+        int right = Math.max(0, maximumPathSum(root.right));
 
-    public static Node deleteLeaf(Node root, int n) {
-        if (root == null) {
-            return null;
-        }
-        Node leftNode = deleteLeaf(root.left, n);
-        Node rightNode = deleteLeaf(root.right, n);
-
-        if (leftNode == null) {
-            root.left = null;
-        }
-
-        if (rightNode == null) {
-            root.right = null;
-        }
-
-        if (leftNode == null && rightNode == null && root.data == n) {
-            root.data = -1;
-            return null;
-        }
-        return root;
+        int sum = root.data + left + right;
+        maxSum = Math.max(sum, maxSum);
+        return root.data + Math.max(left, right);
     }
 
     public static void main(String[] args) {
-        int preorder[] = { 1, 5, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1 };
-        // int preorder[] = { 1, 1, 1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1 };
+        // int preorder[] = { -10, 9, -1, -1, 20, 15, -1, -1, 7, -1, -1};
+        int preorder[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, 6, -1, -1, 7, -1, -1 };
         BinaryTree tree = new BinaryTree();
         Node root = tree.buildBinaryTree(preorder);
-        // tree.preOrder(root);
-        // System.out.println();
-        // tree.inOrder(root);
-        // System.out.println();
-        // tree.postOrder(root);
-        // System.out.println();
-        tree.BFS(root);
-        System.out.println();
-        // System.out.println(tree.height(root));
-        // System.out.println(tree.count(root));
-        // System.out.println(tree.sumOfAllNodes(root));
-        // System.out.println(isuniValued(root, root.data));
-        // invertBinaryTree(root);
-        deleteLeaf(root, 5);
-        tree.BFS(root);
-        System.out.println();
+        maximumPathSum(root);
+        System.out.println(maxSum);
     }
 }
