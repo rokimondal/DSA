@@ -1,8 +1,12 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 import javax.swing.tree.TreeNode;
 
-public class OperationOfBinaryTree {
+public class DuplicateSubtree {
     static class Node {
         int data;
         Node left;
@@ -114,70 +118,32 @@ public class OperationOfBinaryTree {
         }
     }
 
-    public static boolean isuniValued(Node root, int n) {
-        if (root == null) {
-            return true;
+    private static String getSubTree(Node root, HashMap<String, Integer> map, List<Node> ans) {
+        if (root == null)
+            return "N";
+
+        String s = root.data + "," + getSubTree(root.left, map, ans) + "," + getSubTree(root.right, map, ans);
+        map.put(s, map.getOrDefault(s, 0) + 1);
+        if (map.get(s) == 2) {
+            ans.add(root);
         }
-        if (root.data != n) {
-            return false;
-        }
-        return isuniValued(root.left, n) && isuniValued(root.right, n);
+        return s;
     }
 
-    public static void invertBinaryTree(Node root) {
-        if (root == null) {
-            return;
+    public static void findDuplicateSubtrees(Node root) {
+        HashMap<String, Integer> map = new HashMap<>();
+        List<Node> ans = new ArrayList<>();
+        getSubTree(root, map, ans);
+        for (Node ele : ans) {
+            System.out.print(ele.data + " ");
         }
-
-        Node temp = root.left;
-        root.left = root.right;
-        root.right = temp;
-        invertBinaryTree(root.left);
-        invertBinaryTree(root.right);
-    }
-
-    public static Node deleteLeaf(Node root, int n) {
-        if (root == null) {
-            return null;
-        }
-        Node leftNode = deleteLeaf(root.left, n);
-        Node rightNode = deleteLeaf(root.right, n);
-
-        if (leftNode == null) {
-            root.left = null;
-        }
-
-        if (rightNode == null) {
-            root.right = null;
-        }
-
-        if (leftNode == null && rightNode == null && root.data == n) {
-            root.data = -1;
-            return null;
-        }
-        return root;
+        System.out.println();
     }
 
     public static void main(String[] args) {
-        int preorder[] = { 1, 5, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1 };
-        // int preorder[] = { 1, 1, 1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1 };
+        int preorder[] = { 1, 2, 4, -1, -1, -1, 3, 2, 4, -1, -1, -1, 4, -1, -1 };
         BinaryTree tree = new BinaryTree();
         Node root = tree.buildBinaryTree(preorder);
-        // tree.preOrder(root);
-        // System.out.println();
-        // tree.inOrder(root);
-        // System.out.println();
-        // tree.postOrder(root);
-        // System.out.println();
-        tree.BFS(root);
-        System.out.println();
-        // System.out.println(tree.height(root));
-        // System.out.println(tree.count(root));
-        // System.out.println(tree.sumOfAllNodes(root));
-        // System.out.println(isuniValued(root, root.data));
-        // invertBinaryTree(root);
-        deleteLeaf(root, 5);
-        tree.BFS(root);
-        System.out.println();
+        findDuplicateSubtrees(root);
     }
 }
