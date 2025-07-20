@@ -123,6 +123,28 @@ public class BST {
         System.out.println();
     }
 
+    public static boolean isValid(Node root, Node min, Node max) {
+        if (root == null) {
+            return true;
+        }
+        if ((min != null && root.data <= min.data) || (max != null && root.data >= max.data)) {
+            return false;
+        }
+        return isValid(root.left, min, root)
+                && isValid(root.right, root, max);
+    }
+
+    public static Node mirrorBST(Node root) {
+        if (root == null)
+            return null;
+        Node lefts = mirrorBST(root.left);
+        Node rights = mirrorBST(root.right);
+        // Node temp = root.left;
+        root.left = rights;
+        root.right = lefts;
+        return root;
+    }
+
     public static void main(String[] args) {
         int values[] = { 8, 5, 3, 1, 4, 6, 10, 11, 14 };
         Node root = null;
@@ -135,7 +157,10 @@ public class BST {
         // root = delete(root, 5);
         // inorder(root);
         // printInRange(root, 5, 12);
-        List<Integer> path = new ArrayList<>();
-        printallPath(root, path);
+        // List<Integer> path = new ArrayList<>();
+        // printallPath(root, path);
+        // System.out.println(isValid(root, null, null));
+        mirrorBST(root);
+        inorder(root);
     }
 }
