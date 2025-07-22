@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.tree.TreeNode;
+import java.util.*;
 
 public class BST {
     public static class Node {
@@ -145,8 +142,53 @@ public class BST {
         return root;
     }
 
+    public static int maxSize = 0;
+
+    public static class Info {
+        boolean isBST;
+        int size;
+        int min;
+        int max;
+
+        Info(boolean isBST, int size, int min, int max) {
+            this.isBST = isBST;
+            this.size = size;
+            this.min = min;
+            this.max = max;
+        }
+    }
+
+    public static Info getMaxSize(Node root) {
+        boolean isBST = true;
+        int size = 0;
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        if (root == null) {
+            return new Info(isBST, size, min, max);
+        }
+
+        Info leftInf = getMaxSize(root.left);
+        Info rightInf = getMaxSize(root.right);
+
+        if (!leftInf.isBST || !rightInf.isBST || root.data <= leftInf.max || root.data >= rightInf.min) {
+            isBST = false;
+        }
+
+        size = leftInf.size + 1 + rightInf.size;
+        min = Math.min(leftInf.min, Math.min(rightInf.min, root.data));
+        max = Math.max(leftInf.max, Math.max(rightInf.max, root.data));
+
+        if (isBST) {
+            maxSize = Math.max(maxSize, size);
+        }
+
+        return new Info(isBST, size, min, max);
+    }
+
+    
     public static void main(String[] args) {
-        int values[] = { 8, 5, 3, 1, 4, 6, 10, 11, 14 };
+        int values[] = { 8, 6, 5, 3, 10, 11, 12 };
         Node root = null;
         for (int value : values) {
             root = insert(root, value);
@@ -160,7 +202,23 @@ public class BST {
         // List<Integer> path = new ArrayList<>();
         // printallPath(root, path);
         // System.out.println(isValid(root, null, null));
-        mirrorBST(root);
-        inorder(root);
+
+        // creating bt manually
+        // Node root = new Node(50);
+        // root.left = new Node(30);
+        // root.right = new Node(60);
+
+        // root.left.left = new Node(5);
+        // root.left.right = new Node(20);
+
+        // root.right.left = new Node(45);
+        // root.right.right = new Node(70);
+
+        // root.right.right.left = new Node(65);
+        // root.right.right.right = new Node(80);
+
+        // getMaxSize(root);
+        // System.out.println(maxSize);
+
     }
 }
