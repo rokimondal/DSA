@@ -93,7 +93,7 @@ public class BalancedBST {
         inOrder(root1, seq1);
         inOrder(root2, seq2);
 
-        int i = 0, j = 0, k = 0;
+        int i = 0, j = 0;
 
         while (i < seq1.size() && j < seq2.size()) {
             if (seq1.get(i) < seq2.get(j)) {
