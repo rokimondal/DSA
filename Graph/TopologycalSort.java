@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class TopologycalSort {
@@ -31,13 +33,13 @@ public class TopologycalSort {
 
     }
 
-    public static void topSort(ArrayList<Edge>[] graph) {
+    public static void topSortDFS(ArrayList<Edge>[] graph) {
         boolean vis[] = new boolean[graph.length];
         Stack<Integer> s = new Stack<>();
 
         for (int i = 0; i < graph.length; i++) {
             if (!vis[i]) {
-                topSortUtill(graph, vis, s, i);
+                topSortUtillDFS(graph, vis, s, i);
             }
         }
 
@@ -47,22 +49,54 @@ public class TopologycalSort {
 
     }
 
-    public static void topSortUtill(ArrayList<Edge>[] graph, boolean vis[], Stack<Integer> s, int curr) {
+    public static void topSortUtillDFS(ArrayList<Edge>[] graph, boolean vis[], Stack<Integer> s, int curr) {
         vis[curr] = true;
         for (int i = 0; i < graph[curr].size(); i++) {
             Edge e = graph[curr].get(i);
             if (!vis[e.dest]) {
-                topSortUtill(graph, vis, s, e.dest);
+                topSortUtillDFS(graph, vis, s, e.dest);
             }
         }
         s.push(curr);
     }
 
+    public static void topSortBFS(ArrayList<Edge>[] graph) {
+        int indeg[] = new int[graph.length];
+        System.out.println(indeg);
+        Queue<Integer> q = new LinkedList<>();
+
+        for (int i = 0; i < graph.length; i++) {
+            for (int j = 0; j < graph[i].size(); j++) {
+                Edge e = graph[i].get(j);
+                indeg[e.dest]++;
+            }
+        }
+
+        for (int i = 0; i < indeg.length; i++) {
+            if (indeg[i] == 0) {
+                q.add(i);
+            }
+        }
+
+        while(!q.isEmpty()){
+            int curr = q.remove();
+            System.out.print(curr+" ");
+            for(int i=0; i<graph[curr].size(); i++){
+                Edge e = graph[curr].get(i);
+                indeg[e.dest]--;
+                if(indeg[e.dest]==0){
+                    q.add(e.dest);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         int v = 6;
+        @SuppressWarnings("unchecked")
         ArrayList<Edge>[] graph = new ArrayList[v];
         createGraph(graph);
-        topSort(graph);
+        topSortBFS(graph);
     }
 
 }
