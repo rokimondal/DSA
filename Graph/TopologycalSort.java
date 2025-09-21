@@ -96,7 +96,6 @@ public class TopologycalSort {
         @SuppressWarnings("unchecked")
         ArrayList<Edge>[] graph = new ArrayList[v];
         createGraph(graph);
-        topSortBFS(graph);
     }
 
 }
