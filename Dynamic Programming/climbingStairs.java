@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class climbingStairs {
+public class ClimbingStairs {
 
     public static int climbStairRecursion(int n) {
         if (n == 0)

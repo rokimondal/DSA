@@ -1,4 +1,4 @@
-public class fibonacci {
+public class Fibonacci {
 
     public static int fiboMemoiztion(int n, int f[]) { // TopDown
         if (n == 0 || n == 1)
