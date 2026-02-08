@@ -67,7 +67,7 @@ public class MinMaxElementQuery {
         buildMinTree(arr, 2 * i + 1, si, mid);
         buildMinTree(arr, 2 * i + 2, mid + 1, sj);
 
-        minTree[i] = Math.max(minTree[2 * i + 1], minTree[2 * i + 2]);
+        minTree[i] = Math.min(minTree[2 * i + 1], minTree[2 * i + 2]);
     }
 
     private static int getMinUtill(int arr[], int i, int si, int sj, int qi, int qj) {
@@ -91,7 +91,6 @@ public class MinMaxElementQuery {
         if (idx < si || idx > sj) {
             return;
         }
-
         minTree[i] = Math.min(minTree[i], newValue);
         if (si != sj) {
             int mid = (si + sj) / 2;
@@ -108,16 +107,28 @@ public class MinMaxElementQuery {
     public static void main(String[] args) {
         int arr[] = { 6, 8, -1, 2, 17, 1, 3, 2, 4 };
         int n = arr.length;
-        initMax(n);
-        buildMaxTree(arr, 0, 0, n - 1);
-        for (int e : maxTree) {
+        // initMax(n);
+        // buildMaxTree(arr, 0, 0, n - 1);
+        // for (int e : maxTree) {
+        // System.out.print(e + " ");
+        // }
+        // System.out.println();
+        // System.out.println(getMax(arr, 5, 8));
+        // updateMax(arr, 5, 20);
+        // System.out.println(getMax(arr, 5, 8));
+        // for (int e : maxTree) {
+        // System.out.print(e + " ");
+        // }
+        initMin(n);
+        buildMinTree(arr, 0, 0, n - 1);
+        for (int e : minTree) {
             System.out.print(e + " ");
         }
         System.out.println();
-        System.out.println(getMax(arr, 5, 8));
-        updateMax(arr, 5, 20);
-        System.out.println(getMax(arr, 5, 8));
-        for (int e : maxTree) {
+        System.out.println(getMin(arr, 0, 8));
+        updateMin(arr, 2, -5);
+        System.out.println(getMin(arr, 0, 8));
+        for (int e : minTree) {
             System.out.print(e + " ");
         }
     }
